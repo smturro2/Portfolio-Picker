@@ -1,6 +1,11 @@
 from flask import Flask, render_template
+import Gen_Stock_Data
+from Portfolio_Manager import PortfolioManager
+
 
 app = Flask(__name__)
+
+port_manager = PortfolioManager()
 
 
 # Default home page - New Portfolio Page
@@ -24,4 +29,9 @@ def More_Page():
 
 
 if __name__ == "__main__":
+    # Generate Fake Stock Data on site startup
+    # todo: uncomment this
+    # Gen_Stock_Data.run()
+
+    # Run Website
     app.run(debug=True)
