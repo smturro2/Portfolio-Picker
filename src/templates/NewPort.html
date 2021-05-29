@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block head %}
+<!-- Javascript for a new row-->
+<script>
+    currNumRows = 1;
+
+    function addRow() {
+      ele = document.getElementById("stock_row_"+currNumRows);
+      ele.style.display="";
+      currNumRows +=1;
+    }
+</script>
+{% endblock %}
+
+{% block body %}
+<div class="container pageHeader">
+    <!-- Nav bar  -->
+    <div id="myNavBar">
+        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <a class="nav-link active" data-toggle="pill" href="{{url_for('NewPort_Page')}}" role="tab" aria-controls="v-pills-home" aria-selected="true">New Portfolio</a>
+            <a class="nav-link" data-toggle="pill" href="{{url_for('Strategy_Page')}}" role="tab" aria-controls="v-pills-profile" aria-selected="false">Develop Strategy</a>
+            <a class="nav-link" data-toggle="pill" href="{{url_for('More_Page')}}" role="tab" aria-controls="v-pills-messages" aria-selected="false">More</a>
+        </div>
+    </div>
+
+    <!--  Page Header and Desc  -->
+    <h1>Create a New Portfolio</h1>
+    <p id="pageDesc">tsdkfmdsmflsdmfkldsnf ksdlnfklds fnklsdnfkdsnfdlksnfsdlknfsdlkfnkdslnfkdn</p>
+</div>
+
+<!-- Main Content-->
+<div id="BodyContent">
+    <form>
+        <!--   Portfolio Name     -->
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Portfolio Name</span>
+            </div>
+            <input type="text" class="form-control" placeholder="Portfolio 7" aria-label="Username" aria-describedby="basic-addon1">
+        </div>
+
+        <!--    Stock Inputs    -->
+        <table id="tableOfStocks">
+            <tr id="headerRow">
+                <th>Stock Ticker</th>
+                <th>Stock Name</th>
+                <th>Relative Weight</th>
+            </tr>
+
+            <tr id="stock_row_0">
+                <td><input type="text" id="stock_tick_0"class="form-control" placeholder="Ticker"></td>
+                <td><input type="text" id="stock_name_0"class="form-control" placeholder="Name"></td>
+                <td><input type="text" id="stock_weight_0"class="form-control" placeholder="Weight"></td>
+            </tr>
+            {%for i in range(1, 10)%}
+                <tr id="stock_row_{{i}}" style="Display:none;">
+                    <td><input type="text" id="stock_tick_{{i}}"class="form-control" placeholder="Ticker"></td>
+                    <td><input type="text" id="stock_name_{{i}}"class="form-control" placeholder="Name"></td>
+                    <td><input type="text" id="stock_weight_{{i}}"class="form-control" placeholder="Weight"></td>
+                </tr>
+            {%endfor%}
+
+            <tr style="border:none;">
+                <td colspan="3" onclick="addRow()" ><div style="width: max-content;margin:auto;cursor:pointer;">
+                    Add Stock <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                </div></td>
+            </tr>
+        </table>
+
+        <!--    Submit    -->
+        <button type="submit" style="float: right;" class="btn btn-primary">Submit Portfolio</button>
+    </form>
+</div>
+{% endblock %}

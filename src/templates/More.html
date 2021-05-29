@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<div class="container pageHeader">
+    <!-- Nav bar  -->
+    <div id="myNavBar">
+        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <a class="nav-link" data-toggle="pill" href="{{url_for('NewPort_Page')}}" role="tab" aria-controls="v-pills-home" aria-selected="true">New Portfolio</a>
+            <a class="nav-link" data-toggle="pill" href="{{url_for('Strategy_Page')}}" role="tab" aria-controls="v-pills-profile" aria-selected="false">Develop Strategy</a>
+            <a class="nav-link active" data-toggle="pill" href="{{url_for('More_Page')}}" role="tab" aria-controls="v-pills-messages" aria-selected="false">More</a>
+        </div>
+    </div>
+
+    <!--  Page Header and Desc  -->
+    <h1>More Information</h1>
+    <p id="pageDesc">tsdkfmdsmflsdmfkldsnf ksdlnfklds fnklsdnfkdsnfdlksnfsdlknfsdlkfnkdslnfkdn</p>
+</div>
+
+<!-- Main Content-->
+<div id="BodyContent">
+
+</div>
+{% endblock %}

@@ -1,0 +1,64 @@
+/* CSS for page layout */
+body {
+    overflow-x:hidden;
+    font-family: 'Montserrat', sans-serif;
+}
+div#BodyContent {
+    padding:25px 15%;
+}
+h1 {
+    font-weight:bold;
+}
+.pageHeader {
+    margin: auto;
+    padding: 30px 15%;
+}
+a {
+    color:#597fb9;
+}
+
+/* CSS for Nav Bar */
+div#myNavBar{
+    float: left;
+    border: .5px gray solid;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 3px 3px 15px 1px #8888;
+    margin-right:5%;
+}
+.nav-link.active {
+    background-color:#597fb9 !important;
+    color:white;
+}
+
+/* CSS for New stock table */
+table#tableOfStocks{
+    margin: auto;
+    width: 100%;
+}
+
+table#tableOfStocks tr{
+    border:1px solid black;
+}
+table#tableOfStocks tr#headerRow{
+    border: none;
+    text-align: center;
+}
+
+table#tableOfStocks td{
+    padding: 0px;
+}
+
+table#tableOfStocks td * {
+    padding: 0px;
+    border-radius: 0px;
+}
+
+
+/* Misc */
+.fa-plus-circle{
+    color:#32a852;
+}
+.input-group {
+    width:max-content;
+}
