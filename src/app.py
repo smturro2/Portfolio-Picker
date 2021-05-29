@@ -1,9 +1,4 @@
-from flask import Flask, make_response, redirect, request, jsonify, render_template, flash
-import matplotlib.pyplot as plt
-from matplotlib.figure import Figure
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-import io
-import numpy as np
+from flask import Flask, render_template
 
 app = Flask(__name__)
 

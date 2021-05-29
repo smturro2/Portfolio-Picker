@@ -1,5 +1,1 @@
 Flask
-matplotlib
-numpy
-scipy
-Quantum-Tomography
