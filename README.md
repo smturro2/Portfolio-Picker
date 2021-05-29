@@ -1,7 +1,7 @@
 # Portfolio Picker
 
 ## Setup
-This python application is built,tested, and hosted around python 3.8. 
+This python application is built and tested around python 3.8. 
 For best results [install this version of python](https://www.python.org/downloads/). 
 
 1. **Clone** the repo to your local computer
