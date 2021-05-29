@@ -2,7 +2,7 @@
 
 ## Setup
 This python application is built and tested around python 3.8. 
-For best results [install this version of python](https://www.python.org/downloads/). 
+For best results [install python 3.8](https://www.python.org/downloads/). 
 
 1. **Clone** the repo to your local computer
 
