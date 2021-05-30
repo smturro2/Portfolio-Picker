@@ -1,6 +1,16 @@
 {% extends 'base.html' %}
 
 {% block head %}
+<!-- Javascript for displaying loading animation-->
+<script>
+    function displayLoading() {
+        document.getElementById("LoadingScreen").style.display = "";
+        document.getElementById("LoadingScreenBar").style.display = "";
+        document.getElementById("tableOfPorts").style.display = "none";
+        document.getElementById("StratResults").style.display = "none";
+        document.getElementById("LoadingScreenBar2").style.display = "none";
+    }
+</script>
 {% endblock %}
 
 {% block body %}
@@ -22,7 +32,10 @@
 
 <!-- Main Content-->
 <div id="BodyContent">
-    <form>
+    <form action="{{ url_for('Strategy_Out_Page') }}" method="post">
+        <!--    Submit    -->
+        <button type="submit" class="btn btn-primary" style="float:right;" onclick="displayLoading()">Calculate Strategy</button>
+
         <!--   Risk Amount     -->
         <div class="input-group mb-3">
             <div class="input-group-prepend">
@@ -33,11 +46,25 @@
                     </a>
                 </span>
             </div>
-            <input type="text" class="form-control" placeholder="Default : 1" aria-label="Username" aria-describedby="basic-addon1">
+            <input type="text" name="risk" class="form-control" placeholder="Default : 1">
         </div>
 
-        <!--    Submit    -->
-        <button type="submit" style="float: right;" class="btn btn-primary">Calculate Strategy</button>
     </form>
+    <hr id="LoadingScreenBar" style="display:none;margin-top: 30px;">
+    <div id="LoadingScreen" style="display:none;">
+        <div class="row">
+            <div class="col-sm-4" style="width: min-content;">
+                <div class="loader"></div>
+            </div>
+            <div class="col-sm-4">
+                <h2>Calculating Optimal Strategy...</h2>
+            </div>
+        </div>
+    </div>
+    {% if outPut %}
+        <hr id="LoadingScreenBar2" style="margin-top: 30px;">
+        {{TORR|safe}}
+    {% endif %}
 </div>
+
 {% endblock %}

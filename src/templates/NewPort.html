@@ -71,7 +71,7 @@
             <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1">Portfolio Name</span>
             </div>
-            <input type="text" class="form-control" placeholder="Portfolio {{numPorts}}" aria-label="Username" aria-describedby="basic-addon1">
+            <input type="text" name="portName" class="form-control" placeholder="Portfolio {{numPorts}}" aria-label="Username" aria-describedby="basic-addon1">
         </div>
 
         <!--    Stock Inputs    -->
@@ -107,6 +107,10 @@
         <!--    Submit    -->
         <button type="submit" style="float: right;" class="btn btn-primary">Submit Portfolio</button>
     </form>
+
+    {% if submittedAPort %}
+        <h2 id="submittedAPort">Portfolio Successfully Submitted!</h2>
+    {% endif %}
 </div>
 
 <!-- Javascript for autocomplete form-->

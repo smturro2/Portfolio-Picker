@@ -9,14 +9,20 @@ from Portfolio_Manager import PortfolioManager
 from Edited_Qiskit_portfolio import *
 
 
-def getBestStrategy(portfolioMatrix,risk,budget,penalty):
+def getBestStrategy(portfolioMatrix,risk,budget,penalty=0):
     # Set seed for reproducable results
     seed = 503678
 
     # Get the moments of the stocks
     df_Prices = pd.read_csv("DataFiles/StockPrices.csv")
-    mu = np.array(df_Prices.mean())
-    sigma = np.array(df_Prices.cov())
+
+    np_Prices = df_Prices.to_numpy()
+    np_Returns = np_Prices[1:,:]/np_Prices[0:-1,:]-1
+    if(np.isnan(np_Returns).any()):
+        raise ValueError("Invalid Stock Data")
+
+    mu = np.mean(np_Returns,axis=0)
+    sigma = np.cov(np_Returns.T)
 
     # Set up the Quantum operator for a financial portfolio
     qubitOperator, offset = get_operator(mu, sigma, risk, portfolioMatrix, budget, penalty)
@@ -43,6 +49,38 @@ def getBestStrategy(portfolioMatrix,risk,budget,penalty):
 
     return [op_State,op_Cost,op_Return,op_Risk]
 
+def roundFloat(input1):
+    return np.floor(input1*1000+.5)/1000
+
+def buildStrategyHTML(optimization_results,portManager):
+    df_ports = portManager.df_ports
+    strat = optimization_results[0]
+    expReturn = roundFloat(optimization_results[2])
+    risk = roundFloat(optimization_results[3])
+    TORREPLACE = '<h2 id="StratResults">This strategy has a expected return of '+\
+                  str(expReturn)+'% per day! and a predicted risk of '+str(risk)+'</h2>'
+
+
+    TORREPLACE += '<table id="tableOfPorts">' \
+                    '<tr id="headerRow">' \
+                        '<th style="width: 100px;">Included</th>' \
+                        '<th colspan="3">Portfolio Name</th>' \
+                    '</tr>'
+    for i in range(len(strat)):
+        TORREPLACE += '<tr><td colspan="4"><table class="port">'
+        TORREPLACE += '<tr>'
+        if (abs(strat[i] - 1) < 10 ** -6):
+            TORREPLACE += '<td style="border-right: .5px lightgray solid;text-align:center;width:75px;"><i style="color:#32a852;" class="fa fa-check" aria-hidden="true"></i></td>'
+        else:
+            TORREPLACE += '<td style="border-right: .5px lightgray solid;text-align: center;width:75px;"><i style="color:red;" class="fa fa-times" aria-hidden="true"></i></td>'
+
+        TORREPLACE += '<td colspan="3" style="padding-left:25px;">'+df_ports['name'][i]+'</td>'
+        TORREPLACE += '</tr>'
+        TORREPLACE += '</table></td></tr>'
+    TORREPLACE += '</table>'
+    return TORREPLACE
+
+
 # todo : get rid of this
 if __name__ == "__main__":
 
@@ -50,5 +88,5 @@ if __name__ == "__main__":
     port_manager = PortfolioManager()
     portfolioMatrix = port_manager.getPortfolioMatrix()
 
-    results = getBestStrategy(portfolioMatrix=portfolioMatrix,risk=.5,budget=3,penalty=2)
+    results = getBestStrategy(portfolioMatrix=portfolioMatrix,risk=.5,budget=1,penalty=2)
     print("Nice")

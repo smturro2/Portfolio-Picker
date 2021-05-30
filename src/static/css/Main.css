@@ -65,17 +65,39 @@ table#tableOfStocks td * {
     border-radius: 0px;
 }
 
-
-/* Misc */
-.fa-plus-circle{
-    color:#32a852;
+/* Loading icon */
+div#LoadingScreen {
+    margin: auto;
+    width: max-content;
 }
-.input-group {
-    width:max-content;
+div#LoadingScreen h2{
+    font-size:25px;
+    display:inline-block;
+    font-size: 25px;
+    width: max-content;
+    padding: 13px 0;
+}
+.loader {
+    border: 8px solid #f3f3f3;
+    border-top-color: rgb(243, 243, 243);
+    border-top-style: solid;
+    border-top-width: 8px;
+    border-radius: 50%;
+    float:right;
+    border-top: 8px solid #3498db;
+    width: 50px;
+    height: 50px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
 }
 
-/* Autocomplete */
-/*the container must be positioned relative:*/
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Autocomplete div*/
 .autocomplete {
   position: relative;
   display: inline-block;
@@ -109,4 +131,49 @@ table#tableOfStocks td * {
 .autocomplete-active {
   background-color: DodgerBlue !important;
   color: #ffffff;
+}
+
+
+/* Strategy Results */
+table#tableOfPorts{
+    margin: auto;
+    width: 100%;
+    border-spacing: 5px 14px;
+    border-collapse: separate;
+}
+table#tableOfPorts tr{
+    border-radius: 15px;
+    box-shadow: 3px 3px 15px 1px #8888;
+}
+table#tableOfPorts tr#headerRow{
+    border: none;
+    text-align: center;
+    box-shadow: none;
+}
+table#tableOfPorts tr#headerRow th{
+    text-align: left;
+    padding: 0px 13px;
+}
+
+table.port{
+    width: 100%;
+    margin: 10px;
+}
+table.port tr{
+    border-radius: 0px !important;
+    box-shadow: none !important;
+}
+h2#StratResults {
+    font-size: 18px;
+    text-align: center;
+}
+
+
+
+/* Misc */
+.fa-plus-circle{
+    color:#32a852;
+}
+.input-group {
+    width:max-content;
 }

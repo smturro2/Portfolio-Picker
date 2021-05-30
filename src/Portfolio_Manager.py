@@ -27,28 +27,32 @@ class PortfolioManager:
 
         # The lists are stored as strings so we must convert them to lists
         self.numPortfolios = self.df_ports.shape[0]
-        for i in self.df_ports.columns:
+        for i in self.df_ports.columns[0:2]:
             for j in range(self.numPortfolios):
                 self.df_ports[i][j] = stringToList(self.df_ports[i][j])
-                if(i == "weights" and sum(self.df_ports[i][j])-1 > 10**-6):
+                if(i == "weights" and abs(sum(self.df_ports[i][j])-1) > 10**-6):
                     self.df_ports[i][j] = self.df_ports[i][j]/sum(self.df_ports[i][j])
 
         # Get the stock info dataframe
         self.df_stocks = pd.read_csv("DataFiles/StockInfo.csv")
 
     # Add a new portfolio to the current set
-    def addPortfolio(self,listOfTickers,weights):
+    def addPortfolio(self,listOfTickers,weights,portName=None):
         # Convert lists and normalize weights
         listOfTickers = np.array(listOfTickers)
         weights = np.array(weights)
         weights = weights/sum(weights)
-        if(sum(weights)-1 > 10**-6):
+        if(abs(sum(weights)-1) > 10**-6):
             # TODO : remove this
-            raise ValueError("STOPPPP!!!")
+            raise ValueError("Failed to normalize weights")
 
         # Increment number of portfolios and add new row
         self.numPortfolios +=1
-        self.df_ports.loc[self.numPortfolios] = [listOfTickers,weights]
+
+        if(portName == None):
+            portName = "Portfolio" + str(self.numPortfolios)
+
+        self.df_ports.loc[self.numPortfolios] = [listOfTickers,weights,portName]
 
         # Save the data
         self.df_ports.to_csv("DataFiles/Portfolios.csv",index=False)
@@ -64,7 +68,8 @@ class PortfolioManager:
             for i in range(len(port_weights)):
                 index_list = self.df_stocks.index[self.df_stocks['Symbol'] == port_stocks[i]].tolist()
                 if len(index_list) != 1:
-                    raise ValueError("STOPPPP 222!!!")
+                    # todo : remove this
+                    raise ValueError("Invalid Stock in Portfolio")
                 stock_index = index_list[0]
                 A[stock_index,port_index] = port_weights[i]
 
