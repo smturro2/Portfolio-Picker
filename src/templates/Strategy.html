@@ -6,9 +6,15 @@
     function displayLoading() {
         document.getElementById("LoadingScreen").style.display = "";
         document.getElementById("LoadingScreenBar").style.display = "";
-        document.getElementById("tableOfPorts").style.display = "none";
-        document.getElementById("StratResults").style.display = "none";
-        document.getElementById("LoadingScreenBar2").style.display = "none";
+
+        try {
+            document.getElementById("tableOfPorts").style.display = "none";
+            document.getElementById("StratResults").style.display = "none";
+            document.getElementById("LoadingScreenBar2").style.display = "none";
+        }
+        catch(err) {
+          /* pass */
+        }
     }
     function showDetails(name){
         eles = document.getElementsByClassName(name);
@@ -21,6 +27,40 @@
             }
         }
     }
+    function checkInput_Posfloat(x)
+        {
+            ele = document.getElementsByName(x)[0];
+            ele.value = ele.value;
+            val = ele.value;
+            ele.style.border = "";
+            if(val==""){
+              ele.value = parseFloat("1");
+              return true;
+            }
+            if( /^\d+$/.test(val) ||
+                /^\d+\.\d+$/.test(val) ||
+                /^\d+\.+$/.test(val) ||
+                /^\.\d+$/.test(val))
+            {
+              ele.value = parseFloat(val);
+              return true;
+            }
+            else
+            {
+              ele.style.border = "1px solid red";
+              return false;
+            }
+        }
+        function checkInput() {
+            document.getElementById('invalidInput').style.display="none";
+            if(checkInput_Posfloat('risk')){
+                displayLoading();
+                document.form1.submit();
+            }
+            else{
+                document.getElementById('invalidInput').style.display="";
+            }
+        }
 </script>
 {% endblock %}
 
@@ -38,14 +78,14 @@
 
     <!--  Page Header and Desc  -->
     <h1>Develop the Strategy</h1>
-    <p id="pageDesc">tsdkfmdsmflsdmfkldsnf ksdlnfklds fnklsdnfkdsnfdlksnfsdlknfsdlkfnkdslnfkdn</p>
+    <p id="pageDesc">A strategy is a combination of portfolios to invest in. We find the best strategy given a specific risk level using the Quantum Approximate Optimization Algorithm (QAOA). </p>
 </div>
 
 <!-- Main Content-->
 <div id="BodyContent">
-    <form action="{{ url_for('Strategy_Out_Page') }}" method="post">
+    <form action="{{ url_for('Strategy_Out_Page') }}" method="post" name="form1">
         <!--    Submit    -->
-        <button type="submit" class="btn btn-primary" style="float:right;" onclick="displayLoading()">Calculate Strategy</button>
+        <button type="button" class="btn btn-primary" style="float:right;" onclick="checkInput();this.blur()">Calculate Strategy</button>
 
         <!--   Risk Amount     -->
         <div class="input-group mb-3">
@@ -59,7 +99,7 @@
             </div>
             <input type="text" name="risk" class="form-control" placeholder="Default : 1">
         </div>
-
+        <h3 id="invalidInput" style="display:none;">Error. Failed to read input.</h3>
     </form>
     <hr id="LoadingScreenBar" style="display:none;margin-top: 30px;">
     <div id="LoadingScreen" style="display:none;">

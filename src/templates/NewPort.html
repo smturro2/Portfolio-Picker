@@ -44,6 +44,44 @@
             }
         }, 100);
     }
+    /* Check the inputs before submitting */
+    function checkInput() {
+        document.getElementById('invalidInput').style.display="none";
+        errBool = false;
+        currIter = 0;
+        while (currIter<10){
+            tick = document.getElementById('stock_tick_'+currIter);
+            tick.style.border = "none";
+            name_s = document.getElementById('stock_name_'+currIter);
+            name_s.style.border = "none";
+
+            if(tick.value=="" && name_s.value==""){
+                if(currIter == 0){
+                    errBool = true;
+                    tick.style.border = "1px solid red";
+                    name_s.style.border = "1px solid red";
+                }
+                break;
+            }
+            if(!stock_symbols.includes(tick.value)){
+                errBool = true;
+                tick.style.border = "1px solid red";
+            }
+            if(!stock_names.includes(name_s.value)){
+                errBool = true;
+                name_s.style.border = "1px solid red";
+            }
+
+            currIter+=1;
+            console.log(currIter);
+        }
+        if(!errBool){
+            document.form1.submit();
+        }
+        else{
+            document.getElementById('invalidInput').style.display="";
+        }
+    }
 </script>
 {% endblock %}
 
@@ -60,12 +98,13 @@
 
     <!--  Page Header and Desc  -->
     <h1>Create a New Portfolio</h1>
-    <p id="pageDesc">tsdkfmdsmflsdmfkldsnf ksdlnfklds fnklsdnfkdsnfdlksnfsdlknfsdlkfnkdslnfkdn</p>
+    <p id="pageDesc">Using the information from our dealer, configure the components of the portfolio below.
+        The weights will automatically be normalized and a default name will be provided if none is given. Valid stocks are ones currently in the S&P 500.</p>
 </div>
 
 <!-- Main Content-->
 <div id="BodyContent">
-    <form autocomplete="off" action="{{ url_for('NewPort_Page') }}" method="post">
+    <form autocomplete="off" action="{{ url_for('NewPort_Page') }}" name="form1" method="post">
         <!--   Portfolio Name     -->
         <div class="input-group mb-3">
             <div class="input-group-prepend">
@@ -105,11 +144,13 @@
         </table>
 
         <!--    Submit    -->
-        <button type="submit" style="float: right;" class="btn btn-primary">Submit Portfolio</button>
+        <button type="button" style="float: right;" onclick="checkInput();this.blur()" class="btn btn-primary">Submit Portfolio</button>
     </form>
+    <h3 id="invalidInput" style="display:none;">Error. Failed to read input(s).</h3>
 
     {% if submittedAPort %}
         <h2 id="submittedAPort">Portfolio Successfully Submitted!</h2>
+        <h3 id="submittedAPort" style="font-size: 12px;/*! padding: 15px; */text-align: center;width: 100%;display: flow-root;"><a href="{{url_for('Strategy_Page')}}">Find Optimal Strategy</a></h3>
     {% endif %}
 </div>
 
@@ -245,8 +286,6 @@ var stock_names = [
 ];
 
 /*An array containing all the company names*/
-var countries = ["Afghanistan","Albania","Algeria","Andorra","Angola","Anguilla","Antigua & Barbuda","Argentina","Armenia","Aruba","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bermuda","Bhutan","Bolivia","Bosnia & Herzegovina","Botswana","Brazil","British Virgin Islands","Brunei","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Canada","Cape Verde","Cayman Islands","Central Arfrican Republic","Chad","Chile","China","Colombia","Congo","Cook Islands","Costa Rica","Cote D Ivoire","Croatia","Cuba","Curacao","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Ethiopia","Falkland Islands","Faroe Islands","Fiji","Finland","France","French Polynesia","French West Indies","Gabon","Gambia","Georgia","Germany","Ghana","Gibraltar","Greece","Greenland","Grenada","Guam","Guatemala","Guernsey","Guinea","Guinea Bissau","Guyana","Haiti","Honduras","Hong Kong","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Isle of Man","Israel","Italy","Jamaica","Japan","Jersey","Jordan","Kazakhstan","Kenya","Kiribati","Kosovo","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Macau","Macedonia","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Montserrat","Morocco","Mozambique","Myanmar","Namibia","Nauro","Nepal","Netherlands","Netherlands Antilles","New Caledonia","New Zealand","Nicaragua","Niger","Nigeria","North Korea","Norway","Oman","Pakistan","Palau","Palestine","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Puerto Rico","Qatar","Reunion","Romania","Russia","Rwanda","Saint Pierre & Miquelon","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","South Korea","South Sudan","Spain","Sri Lanka","St Kitts & Nevis","St Lucia","St Vincent","Sudan","Suriname","Swaziland","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Timor L'Este","Togo","Tonga","Trinidad & Tobago","Tunisia","Turkey","Turkmenistan","Turks & Caicos","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States of America","Uruguay","Uzbekistan","Vanuatu","Vatican City","Venezuela","Vietnam","Virgin Islands (US)","Yemen","Zambia","Zimbabwe"];
-
 /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
 autocomplete(document.getElementById("stock_tick_0"), stock_symbols);
 autocomplete(document.getElementById("stock_name_0"), stock_names);
