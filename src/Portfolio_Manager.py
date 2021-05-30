@@ -40,7 +40,7 @@ class PortfolioManager:
     def addPortfolio(self,listOfTickers,weights,portName=None):
         # Convert lists and normalize weights
         listOfTickers = np.array(listOfTickers)
-        weights = np.array(weights)
+        weights = np.array(weights,dtype=float)
         weights = weights/sum(weights)
         if(abs(sum(weights)-1) > 10**-6):
             # TODO : remove this

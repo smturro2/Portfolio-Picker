@@ -1,4 +1,5 @@
 # Portfolio Picker
+Time to make money. Just because banks control what is grouped together in a portfolio, but that doesn't mean we can't find an edge and make money ourselves. 
 
 ## Setup
 This python application is built and tested around python 3.8. 

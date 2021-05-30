@@ -4,3 +4,4 @@ list_of_stocks,weights,name
 ['CHTR' 'TXT' 'VFC' 'VTRS'],[0.2222 0.4444 0.1111 0.2223],Blue Portfolio
 ['ABT' 'HAL' 'JKHY'],[0.3333 0.3333 0.3334],The Penguin's Hedge
 ['J' 'AAPL' 'GS'],[0.3333 0.3333 0.3334],New Tech Group
+['ABT' 'AAPL' 'QCOM'],[0.25 0.5 0.25],Duncans deal

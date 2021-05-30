@@ -23,7 +23,14 @@
 
 <!-- Main Content-->
 <div id="BodyContent">
+    <h1 class="more">Problem </h1>
+    <p>With the large amounts of money at hand, investment centers will look to invest in several things at once to hedge their bet and accumulate money over time. A bank has access to a variety of loans and investments. For the sake of simplicity, we will narrow down our problem to stocks in the S&P 500. The banks decide which stocks to put into a portfolio with the goal of maximizing the expected return. Portfolio optimization is a great application for quantum optimization. It involves optimizing a quadratic equation with quadratic constraints which is a class of problems that quantum computers have shown promising results for. Often, a bank will look to sell a portfolio to an investment center such as Magnetar Capital who is a hedge fund.</p>
+    <p>We consider the role of an analyst working at Magnetar who must decide to buy a variety of portfolios given by the bank. The bank has already configured the portfolios, so we cannot manipulate them in any way. Given a set of portfolios we must decide which portfolios to purchase. Similar to the banks, we wish to maximize our expected profits. Any bet on the market comes with risk. It would be optimal to reduce risk as much as possible but in practice it is unavoidable. We decide on a risk aversion level and maximize our profits with it fixed.</p>
 
+    <h1 class="more">Solution</h1>
+    <p>We provide our analyst with an easy-to-use interface to help manage their problem. Our application helps the user perform two tasks. Save the portfolios given from the dealers and find which portfolios to invest in. </p>
+    <p>When the bank releases information on a portfolio the analyst can view the stocks that comprise it. Depending on the bank this data can come in a variety of ways. The data could be given in an excel sheet, a pdf, or some other file structure. Due to the ambiguity of the given data, we provide an interface for the analyst to input the data. After this step, each portfolio is stored in a consistent structure that we can easily process.</p>
+	<p>To find the most optimal strategy we must search through all combinations of portfolios and find the one that has the best expected return. We implement a quantum algorithm provided by Qiskit called the Quantum Approximate Optimization Algorithm (QAOA). This finds the best strategy using a quantum computer. We set up a cost function to be minimize. A variety of quantum gates are composed to make up a quantum channel with a Hamiltonian equal to the cost function. In this function we have the expected return as well as the expected risk. We wish to maximize risk so we multiply the expected return by -1 in the cost function. The expected risk is multiplied by our risk aversion in order to control the amount of risk in the strategy.</p>
 </div>
 
 <!-- Footer-->
