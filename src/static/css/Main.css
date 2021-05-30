@@ -16,6 +16,10 @@ h1 {
 a {
     color:#597fb9;
 }
+p {
+    font-size: 15px;
+    text-indent: 30px;
+}
 
 /* CSS for Nav Bar */
 div#myNavBar{
@@ -173,7 +177,11 @@ h2#StratResults {
     font-size: 18px;
     text-align: center;
 }
-
+h3#StratResults {
+    font-size: 13px;
+    text-align: center;
+    margin: 0px;
+}
 
 
 /* Misc */
@@ -182,4 +190,22 @@ h2#StratResults {
 }
 .input-group {
     width:max-content;
+}
+
+#invalidInput {
+    color: red;
+    font-size: 15px;
+}
+h2#submittedAPort{
+    font-size: 22px;
+    padding: 15px 0px 0px 0px;
+    text-align: center;
+    width: 100%;
+    display: flow-root;
+}
+h3#submittedAPort{
+    font-size: 12px;
+    text-align: center;
+    width: 100%;
+    display: flow-root;
 }

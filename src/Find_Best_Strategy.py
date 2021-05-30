@@ -61,7 +61,7 @@ def buildStrategyHTML(optimization_results,portManager):
     risk = roundFloat(optimization_results[3])
     TORREPLACE = '<h2 id="StratResults">This strategy has a expected return of '+\
                   str(expReturn)+'% per day! and a predicted risk of '+str(risk)+'</h2>'
-
+    TORREPLACE += '<h3 id="StratResults">Click on a portfolio to view its components.</h3>'
 
     TORREPLACE += '<table id="tableOfPorts">' \
                     '<tr id="headerRow">' \
