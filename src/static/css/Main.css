@@ -209,3 +209,19 @@ h3#submittedAPort{
     width: 100%;
     display: flow-root;
 }
+
+
+/* Footer */
+footer {
+    border-top:.5px solid lightgray;
+}
+footer table{
+    width: 70%;
+    margin: auto;
+}
+footer li{
+    font-size:14px;
+}
+address {
+    display: inline;
+}
