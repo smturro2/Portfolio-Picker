@@ -1,6 +1,6 @@
 list_of_stocks,weights,name
 ['ABT' 'LH' 'WU'],[0.25 0.25 0.5 ],United's Tuesday Offer
 ['COF' 'CHTR'],[0.9 0.1 ],Steve's Offer
-['CHTR' 'TXT' 'VFC' 'VTRS'],[0.22222222 0.44444444 0.11111111 0.22222222],Blue Portfolio
-['ABT' 'HAL' 'JKHY'],[0.33333333 0.33333333 0.33333333],The Penguin's Hedge
-['J' 'AAPL' 'GS'],[0.33333333 0.33333333 0.33333333],New Tech Group
+['CHTR' 'TXT' 'VFC' 'VTRS'],[0.2222 0.4444 0.1111 0.2223],Blue Portfolio
+['ABT' 'HAL' 'JKHY'],[0.3333 0.3333 0.3334],The Penguin's Hedge
+['J' 'AAPL' 'GS'],[0.3333 0.3333 0.3334],New Tech Group

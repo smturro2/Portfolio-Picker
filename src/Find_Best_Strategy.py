@@ -7,6 +7,7 @@ import pandas as pd
 import numpy as np
 from Portfolio_Manager import PortfolioManager
 from Edited_Qiskit_portfolio import *
+import re
 
 
 def getBestStrategy(portfolioMatrix,risk,budget,penalty=0):
@@ -54,6 +55,7 @@ def roundFloat(input1):
 
 def buildStrategyHTML(optimization_results,portManager):
     df_ports = portManager.df_ports
+    df_stocks = portManager.df_stocks
     strat = optimization_results[0]
     expReturn = roundFloat(optimization_results[2])
     risk = roundFloat(optimization_results[3])
@@ -67,15 +69,43 @@ def buildStrategyHTML(optimization_results,portManager):
                         '<th colspan="3">Portfolio Name</th>' \
                     '</tr>'
     for i in range(len(strat)):
-        TORREPLACE += '<tr><td colspan="4"><table class="port">'
+        portName = df_ports['name'][i]
+        className = re.sub(r"[ ']", '', portName)
+
+        TORREPLACE += '<tr><td colspan="4"><table class="port" onclick="showDetails(\''+className+'\')">'
+        # Row with checkmark and portfolio name
         TORREPLACE += '<tr>'
         if (abs(strat[i] - 1) < 10 ** -6):
             TORREPLACE += '<td style="border-right: .5px lightgray solid;text-align:center;width:75px;"><i style="color:#32a852;" class="fa fa-check" aria-hidden="true"></i></td>'
         else:
             TORREPLACE += '<td style="border-right: .5px lightgray solid;text-align: center;width:75px;"><i style="color:red;" class="fa fa-times" aria-hidden="true"></i></td>'
 
-        TORREPLACE += '<td colspan="3" style="padding-left:25px;">'+df_ports['name'][i]+'</td>'
+        TORREPLACE += '<td colspan="3" style="padding-left:25px;">'+portName+'</td>'
         TORREPLACE += '</tr>'
+
+        # Collapsable rows of details
+        TORREPLACE += '<tr id="headerRow" style="display:none;" class="' + className + '">'
+        TORREPLACE += '<th>Ticker</th>'
+        TORREPLACE += '<th>Name</th>'
+        TORREPLACE += '<th>Sector</th>'
+        TORREPLACE += '<th>Weight</th>'
+        TORREPLACE += '</tr>'
+        numTick = 0
+        for tick in df_ports['list_of_stocks'][i]:
+            index_list = df_stocks.index[df_stocks['Symbol'] == tick].tolist()
+            if len(index_list) != 1:
+                # todo : remove this
+                raise ValueError("Invalid Stock in Portfolio")
+            stock_index = index_list[0]
+
+            TORREPLACE += '<tr class="'+className+'" style="display:none;">'
+            TORREPLACE += '<td>'+str(df_stocks.loc[stock_index,"Symbol"])+'</td>'
+            TORREPLACE += '<td>'+str(df_stocks.loc[stock_index,"Security"])+'</td>'
+            TORREPLACE += '<td>'+str(df_stocks.loc[stock_index,"GICS Sector"])+'</td>'
+            TORREPLACE += '<td>'+str(roundFloat(df_ports['weights'][i][numTick])*100)+'%</td>'
+            TORREPLACE += '</tr>'
+            numTick +=1
+
         TORREPLACE += '</table></td></tr>'
     TORREPLACE += '</table>'
     return TORREPLACE

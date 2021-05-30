@@ -10,6 +10,17 @@
         document.getElementById("StratResults").style.display = "none";
         document.getElementById("LoadingScreenBar2").style.display = "none";
     }
+    function showDetails(name){
+        eles = document.getElementsByClassName(name);
+        for(let e of eles){
+            if(e.style.display == "none"){
+                e.style.display = "";
+            }
+            else{
+                e.style.display = "none";
+            }
+        }
+    }
 </script>
 {% endblock %}
 
