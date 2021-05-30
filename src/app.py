@@ -1,7 +1,8 @@
-from flask import Flask, render_template
+from flask import Flask, render_template,request
 import Gen_Stock_Data
 from Portfolio_Manager import PortfolioManager
-
+import pandas as pd
+import numpy as np
 
 app = Flask(__name__)
 
@@ -12,8 +13,40 @@ port_manager = PortfolioManager()
 # This page lets the user input a new portfolio.
 @app.route('/')
 @app.route('/NewPort')
+@app.route('/NewPort', methods=['POST'])
 def NewPort_Page():
-    return render_template("NewPort.html")
+
+    # Create a new portfolio is one was just submitted
+    if request.method == 'POST':
+        rowNum = 0;
+        list_ticker = list()
+        list_weight = list()
+        while True:
+            ticker = request.values.get('stock_tick_'+str(rowNum));
+            weight = request.values.get('stock_weight_'+str(rowNum));
+            if(ticker != ""):
+                list_ticker.append(ticker)
+                if(weight == ""):
+                    weight=1
+                list_weight.append(weight)
+                rowNum +=1;
+            else:
+                break
+        port_manager.addPortfolio(list_ticker,list_weight)
+
+    # Get the stock info dataframe
+    df_stocks = pd.read_csv("DataFiles/StockInfo.csv")
+    stocks_tickers = np.array(df_stocks['Symbol'])
+    stocks_names = np.array(df_stocks['Security'])
+    return render_template("NewPort.html",
+                           tickers=stocks_tickers,
+                           names=stocks_names,
+                           indexes=np.arange(len(stocks_names)),
+                           numPorts=port_manager.numPortfolios+1)
+@app.route('/NewPort/Submit', methods=['POST'])
+def createNewPortfolio():
+    projectpath = request.form['projectFilepath']
+
 
 # Strategy Page.
 # This page allows you to find the best strategy given the risk amount.

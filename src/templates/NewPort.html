@@ -3,11 +3,46 @@
 <!-- Javascript for a new row-->
 <script>
     currNumRows = 1;
+    stock_mapping = {
+    {% for i in indexes %}
+          "{{tickers[i]}}":"{{names[i]}}",
+          "{{names[i]}}":"{{tickers[i]}}",
+    {% endfor %}
+    };
 
+    /*a function to add a new row to the portfolio table:*/
     function addRow() {
-      ele = document.getElementById("stock_row_"+currNumRows);
-      ele.style.display="";
-      currNumRows +=1;
+        ele = document.getElementById("stock_row_"+currNumRows);
+        ele.style.display="";
+        autocomplete(document.getElementById("stock_tick_"+currNumRows), stock_symbols);
+        autocomplete(document.getElementById("stock_name_"+currNumRows), stock_names);
+        currNumRows +=1;
+    }
+
+    /*a function that runs after the input field is exited*/
+    var otherText = "";
+    function enterTicker(tag_id){
+        numRow = tag_id.split("_")[2];
+        inputed = tag_id.split("_")[1];
+
+        ele = document.getElementById(tag_id);
+        var observerInterval = setInterval(function() {
+            text = ele.value;
+            otherText = stock_mapping[text];
+            var x = 0;
+            if (typeof otherText !== "undefined" || ++x === 30) {
+                console.log("okay");
+                console.log(otherText);
+                if(inputed == "tick"){
+                    document.getElementById("stock_".concat("name","_",numRow)).value = otherText;
+                }
+                else{
+                    document.getElementById("stock_".concat("tick","_",numRow)).value = otherText;
+                }
+                console.log(x);
+                clearInterval(observerInterval);
+            }
+        }, 100);
     }
 </script>
 {% endblock %}
@@ -30,13 +65,13 @@
 
 <!-- Main Content-->
 <div id="BodyContent">
-    <form>
+    <form autocomplete="off" action="{{ url_for('NewPort_Page') }}" method="post">
         <!--   Portfolio Name     -->
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1">Portfolio Name</span>
             </div>
-            <input type="text" class="form-control" placeholder="Portfolio 7" aria-label="Username" aria-describedby="basic-addon1">
+            <input type="text" class="form-control" placeholder="Portfolio {{numPorts}}" aria-label="Username" aria-describedby="basic-addon1">
         </div>
 
         <!--    Stock Inputs    -->
@@ -48,15 +83,17 @@
             </tr>
 
             <tr id="stock_row_0">
-                <td><input type="text" id="stock_tick_0"class="form-control" placeholder="Ticker"></td>
-                <td><input type="text" id="stock_name_0"class="form-control" placeholder="Name"></td>
-                <td><input type="text" id="stock_weight_0"class="form-control" placeholder="Weight"></td>
+                <div class="autocomplete">
+                    <td><input type="text" id="stock_tick_0" name="stock_tick_0" class="form-control" placeholder="Ticker" onfocusout="enterTicker(this.id)"></td>
+                    <td><input type="text" id="stock_name_0" name="stock_name_0" class="form-control" placeholder="Name" onfocusout="enterTicker(this.id)"></td>
+                    <td><input type="text" id="stock_weight_0" name="stock_weight_0" class="form-control" placeholder="Default : 1"></td>
+                </div>
             </tr>
             {%for i in range(1, 10)%}
                 <tr id="stock_row_{{i}}" style="Display:none;">
-                    <td><input type="text" id="stock_tick_{{i}}"class="form-control" placeholder="Ticker"></td>
-                    <td><input type="text" id="stock_name_{{i}}"class="form-control" placeholder="Name"></td>
-                    <td><input type="text" id="stock_weight_{{i}}"class="form-control" placeholder="Weight"></td>
+                    <td><input type="text" id="stock_tick_{{i}}" name="stock_tick_{{i}}" class="form-control" placeholder="Ticker" onfocusout="enterTicker(this.id)"></td>
+                    <td><input type="text" id="stock_name_{{i}}" name="stock_name_{{i}}"class="form-control" placeholder="Name" onfocusout="enterTicker(this.id)"></td>
+                    <td><input type="text" id="stock_weight_{{i}}" name="stock_weight_{{i}}"class="form-control" placeholder="Default : 1"></td>
                 </tr>
             {%endfor%}
 
@@ -71,4 +108,144 @@
         <button type="submit" style="float: right;" class="btn btn-primary">Submit Portfolio</button>
     </form>
 </div>
+
+<!-- Javascript for autocomplete form-->
+<script>
+function autocomplete(inp, arr) {
+	/*the autocomplete function takes two arguments,
+    the text field element and an array of possible autocompleted values:*/
+    var currentFocus;
+
+    /*execute a function when someone writes in the text field:*/
+    inp.addEventListener("input", function(e) {
+	    var a, b, i, val = this.value;
+	    /*close any already open lists of autocompleted values*/
+	    closeAllLists();
+	    if (!val) { return false;}
+	    currentFocus = -1;
+
+	    /*create a DIV element that will contain the items (values):*/
+	    a = document.createElement("DIV");
+	    a.setAttribute("id", this.id + "autocomplete-list");
+	    a.setAttribute("class", "autocomplete-items");
+
+	    /*append the DIV element as a child of the autocomplete container:*/
+	    this.parentNode.appendChild(a);
+
+	    /*for each item in the array...*/
+	    var numKids = 0;
+	    for (i = 0; i < arr.length; i++) {
+	        /*check if the item starts with the same letters as the text field value:*/
+	        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+	            /*create a DIV element for each matching element:*/
+	            b = document.createElement("DIV");
+
+	            /*make the matching letters bold:*/
+	            b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+	            b.innerHTML += arr[i].substr(val.length);
+	            /*insert a input field that will hold the current array item's value:*/
+	            b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+	            /*execute a function when someone clicks on the item value (DIV element):*/
+	            b.addEventListener("click", function(e) {
+	                /*insert the value for the autocomplete text field:*/
+	                inp.value = this.getElementsByTagName("input")[0].value;
+
+	                /*close the list of autocompleted values, (or any other open lists of autocompleted values:*/
+	                closeAllLists();
+	            });
+	            a.appendChild(b);
+	            if (numKids > 5) {
+                    break;
+                }
+                else{
+                    numKids=numKids+1;
+                }
+	        }
+	    }
+    });
+
+    /*execute a function presses a key on the keyboard:*/
+    inp.addEventListener("keydown", function(e) {
+  		var x = document.getElementById(this.id + "autocomplete-list");
+      	if (x) x = x.getElementsByTagName("div");
+		if (e.keyCode == 40) {
+			/*If the arrow DOWN key is pressed,increase the currentFocus variable:*/
+			currentFocus++;
+			/*and and make the current item more visible:*/
+			addActive(x);
+		}
+		else if (e.keyCode == 38) {
+			/*If the arrow UP key is pressed,
+			decrease the currentFocus variable:*/
+			currentFocus--;
+			/*and and make the current item more visible:*/
+			addActive(x);
+		}
+		else if (e.keyCode == 13 || e.keyCode == 9) {
+			/*If the ENTER key is pressed, prevent the form from being submitted,*/
+			e.preventDefault();
+			if (currentFocus > -1) {
+				/*and simulate a click on the "active" item:*/
+				if (x) x[currentFocus].click();
+			}
+      }
+    });
+
+    function addActive(x) {
+	    /*a function to classify an item as "active":*/
+	    if (!x) return false;
+
+	    /*start by removing the "active" class on all items:*/
+	    removeActive(x);
+	    if (currentFocus >= x.length) currentFocus = 0;
+	    if (currentFocus < 0) currentFocus = (x.length - 1);
+
+	    /*add class "autocomplete-active":*/
+	    x[currentFocus].classList.add("autocomplete-active");
+    }
+
+    function removeActive(x) {
+	    /*a function to remove the "active" class from all autocomplete items:*/
+	    for (var i = 0; i < x.length; i++) {
+			x[i].classList.remove("autocomplete-active");
+	    }
+    }
+    function closeAllLists(elmnt) {
+	    /*close all autocomplete lists in the document,
+	    except the one passed as an argument:*/
+	    var x = document.getElementsByClassName("autocomplete-items");
+	    for (var i = 0; i < x.length; i++) {
+			if (elmnt != x[i] && elmnt != inp) {
+				x[i].parentNode.removeChild(x[i]);
+			}
+	    }
+    }
+
+    /*execute a function when someone clicks in the document:*/
+	document.addEventListener("click", function (e) {
+		closeAllLists(e.target);
+	});
+}
+
+/*An array containing all the stock tickers*/
+var stock_symbols = [
+{% for i in tickers %}
+      "{{i}}",
+{% endfor %}
+];
+/*An array containing all the company names*/
+var stock_names = [
+{% for i in names %}
+      "{{i}}",
+{% endfor %}
+];
+
+/*An array containing all the company names*/
+var countries = ["Afghanistan","Albania","Algeria","Andorra","Angola","Anguilla","Antigua & Barbuda","Argentina","Armenia","Aruba","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bermuda","Bhutan","Bolivia","Bosnia & Herzegovina","Botswana","Brazil","British Virgin Islands","Brunei","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Canada","Cape Verde","Cayman Islands","Central Arfrican Republic","Chad","Chile","China","Colombia","Congo","Cook Islands","Costa Rica","Cote D Ivoire","Croatia","Cuba","Curacao","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Ethiopia","Falkland Islands","Faroe Islands","Fiji","Finland","France","French Polynesia","French West Indies","Gabon","Gambia","Georgia","Germany","Ghana","Gibraltar","Greece","Greenland","Grenada","Guam","Guatemala","Guernsey","Guinea","Guinea Bissau","Guyana","Haiti","Honduras","Hong Kong","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Isle of Man","Israel","Italy","Jamaica","Japan","Jersey","Jordan","Kazakhstan","Kenya","Kiribati","Kosovo","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Macau","Macedonia","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Montserrat","Morocco","Mozambique","Myanmar","Namibia","Nauro","Nepal","Netherlands","Netherlands Antilles","New Caledonia","New Zealand","Nicaragua","Niger","Nigeria","North Korea","Norway","Oman","Pakistan","Palau","Palestine","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Puerto Rico","Qatar","Reunion","Romania","Russia","Rwanda","Saint Pierre & Miquelon","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","South Korea","South Sudan","Spain","Sri Lanka","St Kitts & Nevis","St Lucia","St Vincent","Sudan","Suriname","Swaziland","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Timor L'Este","Togo","Tonga","Trinidad & Tobago","Tunisia","Turkey","Turkmenistan","Turks & Caicos","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States of America","Uruguay","Uzbekistan","Vanuatu","Vatican City","Venezuela","Vietnam","Virgin Islands (US)","Yemen","Zambia","Zimbabwe"];
+
+/*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+autocomplete(document.getElementById("stock_tick_0"), stock_symbols);
+autocomplete(document.getElementById("stock_name_0"), stock_names);
+</script>
+
 {% endblock %}

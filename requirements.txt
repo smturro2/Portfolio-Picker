@@ -1,4 +1,4 @@
 Flask
-Qiskit
+Qiskit==0.26.2
 numpy
 pandas
